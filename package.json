@@ -17,5 +17,8 @@
     "joi": "^17.7.0",
     "jsonwebtoken": "^9.0.0",
     "pg": "^8.8.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
   }
 }
