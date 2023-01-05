@@ -5,7 +5,7 @@ export function createPost(user, infos) {
     `
     INSERT INTO posts (user_id, link, description, likes) 
         VALUES ($1, $2, $3, $4)`,
-        [user.id, infos.link, infos.description, 0]
+    [user.id, infos.link, infos.description, 0]
   );
 }
 
@@ -18,4 +18,12 @@ export function getPost() {
     JOIN users ON posts.user_id = users.id
     ORDER BY posts.id DESC
     LIMIT 20`);
+}
+
+export function updatePost(body) {
+  return connectionDB.query(
+    `UPDATE posts 
+        SET description = $1 WHERE id = $2`,
+    [body.description, body.id]
+  );
 }

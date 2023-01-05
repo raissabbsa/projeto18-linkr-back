@@ -1,5 +1,5 @@
 import { postSchema } from "../schemas/postSchema.js";
-import { createPost, getPost } from "../repositories/postsRepository.js";
+import { createPost, getPost, updatePost } from "../repositories/postsRepository.js";
 import { connectionDB } from "../database/db.js";
 
 export async function postPosts(req, res){
@@ -35,11 +35,9 @@ export async function getPosts(req, res){
 
 export async function updatePosts(req, res){
     const user = res.locals.user;
-    console.log(user)
-    const description = req.body;
+    const body = req.body;
     try{
-        await connectionDB.query(`UPDATE posts SET description = $1 WHERE id = $2`, 
-            [req.body.description, req.body.id]);
+        await updatePost(body)
         res.sendStatus(200)
     }catch(err){
         console.log(err);
