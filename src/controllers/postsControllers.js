@@ -1,9 +1,8 @@
 import { postSchema } from "../schemas/postSchema.js";
-import { createPost } from "../repositories/postsRepository.js";
+import { createPost, getPost } from "../repositories/postsRepository.js";
 import { connectionDB } from "../database/db.js";
 
 export async function postPosts(req, res){
-    console.log(res.locals.user)
     const user = res.locals.user;
     const infos = req.body;
 
@@ -25,16 +24,23 @@ export async function postPosts(req, res){
 
 export async function getPosts(req, res){
     try{
-        const posts = await connectionDB.query(`
-            SELECT posts.*, 
-            users.picture_url AS picture_user,
-            users.username
-            FROM posts
-            JOIN users ON posts.user_id = users.id
-            ORDER BY posts.id DESC
-            LIMIT 20`);
-
+        const posts = await getPost();
         res.send(posts.rows);
+
+    }catch(err){
+        console.log(err);
+        res.sendStatus(500);
+    }
+}
+
+export async function updatePosts(req, res){
+    const user = res.locals.user;
+    console.log(user)
+    const description = req.body;
+    try{
+        await connectionDB.query(`UPDATE posts SET description = $1 WHERE id = $2`, 
+            [req.body.description, req.body.id]);
+        res.sendStatus(200)
     }catch(err){
         console.log(err);
         res.sendStatus(500);
