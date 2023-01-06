@@ -13,6 +13,9 @@ export async function postPosts(req, res){
     }
 
     const data = await getMetaData(infos.link);
+    if(data.title === undefined) {
+        data.title = data.provider;
+    }
     console.log(data);
 
     try{
