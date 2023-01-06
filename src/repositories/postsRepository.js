@@ -27,3 +27,17 @@ export function updatePost(body) {
     [body.description, body.id]
   );
 }
+
+export function deletePost(id) {
+  return connectionDB.query(
+    `DELETE FROM posts WHERE id = $1`,
+    [id]
+  );
+}
+
+export function deleteHashtags(id) {
+  return connectionDB.query(
+    `DELETE FROM hashtag_post WHERE post_id = $1`,
+    [id]
+  );
+}
