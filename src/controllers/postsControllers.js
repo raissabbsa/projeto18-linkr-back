@@ -1,6 +1,6 @@
 import { postSchema } from "../schemas/postSchema.js";
 import { createPost, getPost, updatePost } from "../repositories/postsRepository.js";
-import { connectionDB } from "../database/db.js";
+import getMetaData from 'metadata-scraper';
 
 export async function postPosts(req, res){
     const user = res.locals.user;
@@ -12,8 +12,11 @@ export async function postPosts(req, res){
         return res.status(422).send(errors);
     }
 
+    const data = await getMetaData(infos.link);
+    console.log(data);
+
     try{
-        await createPost(user, infos);
+        await createPost(user, infos, data);
         res.sendStatus(201);
 
     }catch(err){
