@@ -1,9 +1,8 @@
 import { postSchema } from "../schemas/postSchema.js";
-import { createPost } from "../repositories/postsRepository.js";
-import { connectionDB } from "../database/db.js";
+import { createPost, deleteHashtags, deletePost, getPost, updatePost } from "../repositories/postsRepository.js";
+import getMetaData from 'metadata-scraper';
 
 export async function postPosts(req, res){
-    console.log(res.locals.user)
     const user = res.locals.user;
     const infos = req.body;
 
@@ -13,8 +12,14 @@ export async function postPosts(req, res){
         return res.status(422).send(errors);
     }
 
+    const data = await getMetaData(infos.link);
+    if(data.title === undefined) {
+        data.title = data.provider;
+    }
+    console.log(data);
+
     try{
-        await createPost(user, infos);
+        await createPost(user, infos, data);
         res.sendStatus(201);
 
     }catch(err){
@@ -25,16 +30,33 @@ export async function postPosts(req, res){
 
 export async function getPosts(req, res){
     try{
-        const posts = await connectionDB.query(`
-            SELECT posts.*, 
-            users.picture_url AS picture_user,
-            users.username
-            FROM posts
-            JOIN users ON posts.user_id = users.id
-            ORDER BY posts.id DESC
-            LIMIT 20`);
-
+        const posts = await getPost();
         res.send(posts.rows);
+
+    }catch(err){
+        console.log(err);
+        res.sendStatus(500);
+    }
+}
+
+export async function updatePosts(req, res){
+    const body = req.body;
+    try{
+        await updatePost(body)
+        res.sendStatus(200)
+    }catch(err){
+        console.log(err);
+        res.sendStatus(500);
+    }
+}
+
+export async function deletePosts(req, res){
+    const id = req.params.id;
+
+    try{
+        await deleteHashtags(id);
+        await deletePost(id);
+        res.sendStatus(200);
     }catch(err){
         console.log(err);
         res.sendStatus(500);
