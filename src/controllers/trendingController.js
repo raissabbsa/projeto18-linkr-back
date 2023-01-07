@@ -26,8 +26,14 @@ export async function postHashtags(req, res){
 
 export async function sendHashtags(req, res){
     try{
-        const allHashtags = await connectionDB.query(`SELECT name FROM hashtags`);
-        const arrayHashtags = allHashtags.rows.map(item => item.name);
+        const allHashtags = await connectionDB.query(`
+            SELECT name, COUNT(hashtag_id) as "hashtag_quantity"
+            FROM hashtags JOIN hashtag_post hp
+            ON hashtags.id = hp.hashtag_id
+            GROUP BY name 
+            ORDER BY hashtag_quantity DESC
+        `);
+        const arrayHashtags = allHashtags.rows.map(hashtag => hashtag.name);
         res.send(arrayHashtags);
     }catch(err){
         console.log(err);
