@@ -1,4 +1,4 @@
-import { likePost, dislikePost } from "../repositories/likeRepository.js";
+import { likePost, dislikePost, getPostLikes } from "../repositories/likeRepository.js";
 
 async function like(req, res){
     const { postId } = req.body;
@@ -23,4 +23,17 @@ async function dislike(req, res) {
     }
 }
 
-export { like, dislike };
+async function getLikes(req, res){
+    const user = res.locals.user;
+    try {
+        const likes = await getPostLikes(user.id);
+        const likesToSend = {
+            likes,
+        }
+        res.send(likesToSend);
+    } catch {
+        res.sendStatus(500);
+    }
+}
+
+export { like, dislike, getLikes };
