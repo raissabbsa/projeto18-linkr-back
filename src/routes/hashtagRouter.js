@@ -5,6 +5,6 @@ import { sendPostsByHashtag } from "../controllers/hashtagControllers.js";
 
 const trendingRouter = Router();
 
-trendingRouter.get('/hashtags/:hashtag', authValidation, sendPostsByHashtag);
+trendingRouter.get('/hashtag/:hashtag', authValidation, sendPostsByHashtag);
 
 export default trendingRouter;
