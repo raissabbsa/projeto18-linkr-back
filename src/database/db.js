@@ -10,4 +10,3 @@ export const connectionDB = new Pool({
 	ssl: true,
 });
 
-
