@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { createUser, searchByName } from "../repositories/usersRepository.js";
+import { createUser, getPostsByUserId, searchByName } from "../repositories/usersRepository.js";
 
 export async function signUp(req, res) {
   const user = res.locals.user;
@@ -34,6 +34,18 @@ export async function searchUsers(req, res) {
     const users = await searchByName(search);
     res.send(users.rows);
   } catch (error) {
+    res.sendStatus(500);
+  }
+}
+
+export async function sendPostsByUser(req, res){
+  const { id } = req.params;
+
+  try{
+    const userPosts = await getPostsByUserId(id);
+    res.send(userPosts.rows);
+  }catch(err){
+    console.log(err);
     res.sendStatus(500);
   }
 }
