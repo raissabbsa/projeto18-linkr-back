@@ -16,7 +16,7 @@ export async function postPosts(req, res){
     if(data.title === undefined) {
         data.title = data.provider;
     }
-    console.log(data);
+    // console.log(data);
 
     try{
         await createPost(user, infos, data);
