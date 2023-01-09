@@ -28,7 +28,7 @@ export function deleteHashtag(id){
 
 export function deleteHashtagPost(id){
     return connectionDB.query(`
-        DELETE FROM hashtag_post WHERE id=$1`, 
+        DELETE FROM hashtag_post WHERE hashtag_id=$1`, 
         [id]);
 }
 
