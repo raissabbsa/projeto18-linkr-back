@@ -31,3 +31,12 @@ export function searchByName(search) {
 		[`${search}%`]
 	);
 }
+
+export function getPostsByUserId(user_id){
+	return connectionDB.query(`
+		SELECT p.*, u.picture_url AS picture_user, u.username
+		FROM posts p JOIN users u ON p.user_id = u.id
+		WHERE u.id = $1
+		ORDER BY p.id DESC
+    `, [user_id]);
+}
