@@ -3,9 +3,9 @@ import { connectionDB } from "../database/db.js";
 export function createPost(user, infos, data) {
   return connectionDB.query(
     `
-    INSERT INTO posts (user_id, description, likes, link, link_title, link_description, link_image)
-        VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-    [user.id, infos.description, 0, infos.link, data.title, data.description, data.icon]
+    INSERT INTO posts (user_id, description, likes, comments, reposts, link, link_title, link_description, link_image)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+    [user.id, infos.description, 0, 0, 0, infos.link, data.title, data.description, data.icon]
   );
 }
 
