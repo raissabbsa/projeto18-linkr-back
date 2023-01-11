@@ -49,3 +49,19 @@ export function getPostsByUserId(user_id){
 		[user_id]
 	);
 }
+
+export function followUser(following_id, follower_id){
+	return connectionDB.query(`
+		INSERT INTO followers (following_id, follower_id)
+		VALUES ($1, $2)`,
+		[following_id, follower_id]
+	);
+}
+
+export function unfollowUser(following_id, follower_id){
+	return connectionDB.query(`
+		DELETE FROM followers
+		WHERE following_id=$1 AND follower_id=$2`,
+		[following_id, follower_id]
+	);
+}
