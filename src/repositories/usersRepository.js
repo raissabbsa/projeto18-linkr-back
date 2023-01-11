@@ -24,10 +24,27 @@ export function createUser(user) {
 	);
 }
 
-export function searchByName(search) {
+export function searchWhoIFollow(search, id) {
 	return connectionDB.query(
-		`SELECT * FROM users
-		WHERE username ILIKE $1`,
+		`SELECT u.id, u.username, u.picture_url
+		FROM users u
+		JOIN followers f
+		ON follower_id=$1 AND f.following_id=u.id
+		WHERE u.username ILIKE $2`,
+		[id, `${search}%`]
+	);
+}
+
+export function searchWhoIDontFollow(search) {
+	return connectionDB.query(
+		`SELECT u.id, u.username, u.picture_url
+		FROM users u
+		WHERE u.username ILIKE $1
+		AND NOT EXISTS (
+			SELECT
+			FROM followers f
+			WHERE f.following_id=u.id
+		);`,
 		[`${search}%`]
 	);
 }
@@ -47,5 +64,21 @@ export function getPostsByUserId(user_id){
 		WHERE u.id = $1
 		ORDER BY p.id DESC`,
 		[user_id]
+	);
+}
+
+export function followUser(following_id, follower_id){
+	return connectionDB.query(`
+		INSERT INTO followers (following_id, follower_id)
+		VALUES ($1, $2)`,
+		[following_id, follower_id]
+	);
+}
+
+export function unfollowUser(following_id, follower_id){
+	return connectionDB.query(`
+		DELETE FROM followers
+		WHERE following_id=$1 AND follower_id=$2`,
+		[following_id, follower_id]
 	);
 }
