@@ -6,7 +6,7 @@ const postsRouter = Router();
 
 postsRouter.post("/posts", authValidation, postPosts);
 postsRouter.get("/posts", authValidation, getPosts);
-postsRouter.put("/posts", authValidation, updatePosts)
-postsRouter.delete("/posts/:id", authValidation, deletePosts)
+postsRouter.put("/posts", authValidation, updatePosts);
+postsRouter.delete("/posts/:id", authValidation, deletePosts);
 
 export default postsRouter;

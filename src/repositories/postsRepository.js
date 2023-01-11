@@ -41,3 +41,13 @@ export function deleteHashtags(id) {
     [id]
   );
 }
+
+export function getcomments(id) {
+  return connectionDB.query(`
+  SELECT post_comments.*, 
+  users.picture_url AS picture_user_comment,
+  users.username AS username_comment
+  FROM post_comments 
+  JOIN users ON post_comments.user_id = users.id
+  WHERE post_id=$1`,[id]);
+}
