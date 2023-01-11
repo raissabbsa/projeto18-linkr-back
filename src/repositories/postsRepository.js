@@ -49,5 +49,6 @@ export function getcomments(id) {
   users.username AS username_comment
   FROM post_comments 
   JOIN users ON post_comments.user_id = users.id
-  WHERE post_id=$1`,[id]);
+  WHERE post_id=$1
+  ORDER BY post_comments.id`,[id]);
 }
