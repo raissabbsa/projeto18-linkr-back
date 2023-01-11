@@ -24,10 +24,27 @@ export function createUser(user) {
 	);
 }
 
-export function searchByName(search) {
+export function searchWhoIFollow(search, id) {
 	return connectionDB.query(
-		`SELECT * FROM users
-		WHERE username ILIKE $1`,
+		`SELECT u.id, u.username, u.picture_url
+		FROM users u
+		JOIN followers f
+		ON follower_id=$1 AND f.following_id=u.id
+		WHERE u.username ILIKE $2`,
+		[id, `${search}%`]
+	);
+}
+
+export function searchWhoIDontFollow(search) {
+	return connectionDB.query(
+		`SELECT u.id, u.username, u.picture_url
+		FROM users u
+		WHERE u.username ILIKE $1
+		AND NOT EXISTS (
+			SELECT
+			FROM followers f
+			WHERE f.following_id=u.id
+		);`,
 		[`${search}%`]
 	);
 }
