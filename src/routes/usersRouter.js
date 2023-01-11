@@ -8,7 +8,7 @@ const usersRouter = Router();
 
 usersRouter.post("/signin", signInValidation, signIn);
 usersRouter.post("/signup", signUpValidation, signUp);
-usersRouter.get("/user/search", searchUsers)
+usersRouter.get("/user/search", authValidation, searchUsers)
 usersRouter.get("/user/:id", authValidation, sendPostsByUser)
 usersRouter.get("/user/:id/status", authValidation, followStatus)
 usersRouter.get("/user/:id/follow", authValidation, follow)

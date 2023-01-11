@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { createUser, followUser, getFollowStatus, getPostsByUserId, searchByName, unfollowUser } from "../repositories/usersRepository.js";
+import { createUser, followUser, getFollowStatus, getPostsByUserId, searchWhoIDontFollow, searchWhoIFollow, unfollowUser } from "../repositories/usersRepository.js";
 
 export async function signUp(req, res) {
   const user = res.locals.user;
@@ -29,10 +29,13 @@ export async function signIn(req, res) {
 
 export async function searchUsers(req, res) {
   const search = req.query.name;
+  const { id } = res.locals.user;
 
   try {
-    const users = await searchByName(search);
-    res.send(users.rows);
+    const usersIFollow = await searchWhoIFollow(search, id);
+    const usersIDontFollow = await searchWhoIDontFollow(search);
+    const users = [...usersIFollow.rows, ...usersIDontFollow.rows]
+    res.send(users);
   } catch (error) {
     res.sendStatus(500);
   }
