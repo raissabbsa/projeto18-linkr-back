@@ -57,9 +57,9 @@ export function getFollowStatus(id, myId) {
 	);
 }
 
-export function getPostsByUserId(user_id){
-	return connectionDB.query(`
-		SELECT p.*, u.picture_url AS picture_user, u.username
+export function getPostsByUserId(user_id) {
+	return connectionDB.query(
+		`SELECT p.*, u.picture_url AS picture_user, u.username
 		FROM posts p JOIN users u ON p.user_id = u.id
 		WHERE u.id = $1
 		ORDER BY p.id DESC`,
@@ -67,18 +67,29 @@ export function getPostsByUserId(user_id){
 	);
 }
 
-export function followUser(following_id, follower_id){
-	return connectionDB.query(`
+export function followUser(following_id, follower_id) {
+	return connectionDB.query(
+		`
 		INSERT INTO followers (following_id, follower_id)
 		VALUES ($1, $2)`,
 		[following_id, follower_id]
 	);
 }
 
-export function unfollowUser(following_id, follower_id){
-	return connectionDB.query(`
-		DELETE FROM followers
+export function unfollowUser(following_id, follower_id) {
+	return connectionDB.query(
+		`DELETE FROM followers
 		WHERE following_id=$1 AND follower_id=$2`,
 		[following_id, follower_id]
+	);
+}
+
+export function getMyFollowers(myId) {
+	return connectionDB.query(
+		`SELECT u.id
+		FROM users u
+		JOIN followers f
+		ON follower_id=$1 AND f.following_id=u.id`,
+		[myId]
 	);
 }
