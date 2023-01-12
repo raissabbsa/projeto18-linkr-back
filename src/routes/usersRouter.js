@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { searchUsers, signIn, signUp, sendPostsByUser, followStatus, follow, unfollow } from "../controllers/usersController.js";
+import { searchUsers, signIn, signUp, sendPostsByUser, followStatus, follow, unfollow, getFollowers } from "../controllers/usersController.js";
 import { authValidation } from "../middlewares/authValidationMiddleware.js";
 import { signInValidation } from "../middlewares/signInValidationMiddleware.js";
 import { signUpValidation } from "../middlewares/signUpValidationMiddleware.js";
@@ -13,5 +13,6 @@ usersRouter.get("/user/:id", authValidation, sendPostsByUser)
 usersRouter.get("/user/:id/status", authValidation, followStatus)
 usersRouter.get("/user/:id/follow", authValidation, follow)
 usersRouter.get("/user/:id/unfollow", authValidation, unfollow)
+usersRouter.get("/followers", authValidation, getFollowers)
 
 export default usersRouter;
