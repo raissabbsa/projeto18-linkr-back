@@ -1,10 +1,10 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { getcomments } from "../repositories/postsRepository.js";
 import { createUser, followUser, getFollowStatus, getMyFollowers, getPostsByUserId, searchWhoIDontFollow, searchWhoIFollow, unfollowUser } from "../repositories/usersRepository.js";
 
 export async function signUp(req, res) {
 	const user = res.locals.user;
-
 	try {
 		const hashPassword = bcrypt.hashSync(user.password, 10);
 		await createUser({ ...user, password: hashPassword });
@@ -58,7 +58,16 @@ export async function sendPostsByUser(req, res) {
 
 	try {
 		const userPosts = await getPostsByUserId(id);
-		res.send(userPosts.rows);
+		const postcomments = [];
+        for(let i=0; i< userPosts.rows.length;i++){
+            const commentbyPost = await getcomments(userPosts.rows[i].id);
+            postcomments.push({
+                ...userPosts.rows[i],
+                comments: commentbyPost.rows
+
+            })
+        }
+		res.send(postcomments);
 	} catch (err) {
 		console.log(err);
 		res.sendStatus(500);
