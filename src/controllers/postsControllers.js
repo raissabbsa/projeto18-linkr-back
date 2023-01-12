@@ -1,6 +1,7 @@
 import { postSchema } from "../schemas/postSchema.js";
-import { createPost, deleteHashtags, deletePost, getPost, updatePost } from "../repositories/postsRepository.js";
+import { createPost, deleteHashtags, deletePost, getcomments, getPost, updatePost } from "../repositories/postsRepository.js";
 import getMetaData from 'metadata-scraper';
+import { connectionDB } from "../database/db.js";
 
 export async function postPosts(req, res){
     const user = res.locals.user;
@@ -31,7 +32,17 @@ export async function postPosts(req, res){
 export async function getPosts(req, res){
     try{
         const posts = await getPost();
-        res.send(posts.rows);
+
+        const postcomments = [];
+        for(let i=0; i< posts.rows.length;i++){
+            const commentbyPost = await getcomments(posts.rows[i].id);
+            postcomments.push({
+                ...posts.rows[i],
+                comments: commentbyPost.rows
+
+            })
+        }
+        res.send(postcomments);
 
     }catch(err){
         console.log(err);
