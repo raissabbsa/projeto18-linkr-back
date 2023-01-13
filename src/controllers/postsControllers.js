@@ -30,8 +30,11 @@ export async function postPosts(req, res){
 }
 
 export async function getPosts(req, res){
+    const { id: myId } = res.locals.user;
+
+
     try{
-        const posts = await getPost();
+        const posts = await getPost(myId);
 
         const postcomments = [];
         for(let i=0; i< posts.rows.length;i++){
