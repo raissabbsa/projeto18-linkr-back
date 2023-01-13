@@ -9,15 +9,18 @@ export function createPost(user, infos, data) {
   );
 }
 
-export function getPost() {
+export function getPost(myId) {
   return connectionDB.query(`
     SELECT posts.*,
     users.picture_url AS picture_user,
     users.username
     FROM posts
     JOIN users ON posts.user_id = users.id
+    JOIN followers f ON follower_id=$1 AND f.following_id=users.id
     ORDER BY posts.id DESC
-    LIMIT 20`);
+    LIMIT 20`,
+    [myId]
+  );
 }
 
 export function updatePost(body) {
@@ -44,10 +47,10 @@ export function deleteHashtags(id) {
 
 export function getcomments(id) {
   return connectionDB.query(`
-  SELECT post_comments.*, 
+  SELECT post_comments.*,
   users.picture_url AS picture_user_comment,
   users.username AS username_comment
-  FROM post_comments 
+  FROM post_comments
   JOIN users ON post_comments.user_id = users.id
   WHERE post_id=$1
   ORDER BY post_comments.id`,[id]);
