@@ -1,8 +1,8 @@
-import { likePost, dislikePost, getPostLikes } from "../repositories/likeRepository.js";
+import { likePost, dislikePost, getPostLikes, userLiked, qtdLikes } from "../repositories/likeRepository.js";
 
 async function like(req, res){
-    const { postId } = req.body;
-    const user = res.locals.user;
+    const { postId } = req.params;
+    const { user } = res.locals.user;
 
     try {
         await likePost(postId, user.id);
@@ -13,10 +13,10 @@ async function like(req, res){
 }
 
 async function dislike(req, res) {
-    const { id } = req.params;
-    const user = res.locals.user;
+    const { postId } = req.params;
+    const { user } = res.locals.user;
     try {
-        await dislikePost(id, user.id);
+        await dislikePost(postId, user.id);
         res.sendStatus(200);
     } catch {
         res.sendStatus(500);
@@ -24,11 +24,20 @@ async function dislike(req, res) {
 }
 
 async function getLikes(req, res){
-    const { postId } = req.body;
-    try {
-        const likes = await getPostLikes(postId);
-        res.send(likes).status(200);
-    } catch {
+    const { postId } = req.params;
+    const { user } = res.locals.user;
+    let liked = false;
+    try{
+        const userLike = await userLiked(postId, user.id)
+        const allLikes = await getPostLikes(postId, user.id);
+        const likes = await qtdLikes(postId);
+        if (userLike.rows.length > 0) {
+            liked = true;
+            allLikes.rows.unshift({username: "Você"});
+        }
+        res.json({ likesUsers: allLikes.rows, liked, likes });
+    }
+    catch(error){
         res.sendStatus(500);
     }
 }
