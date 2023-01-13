@@ -4,8 +4,8 @@ import { authValidation } from "../middlewares/authValidationMiddleware.js";
 
 const likeRouter = Router();
 
-likeRouter.post("/like", authValidation, like);
-likeRouter.delete("/dislike/:id", authValidation, dislike);
-likeRouter.get("/likes", authValidation, getLikes);
+likeRouter.post("/like/:postId", authValidation, like);
+likeRouter.post("/dislike/:postId", authValidation, dislike);
+likeRouter.get("/likes/:postId", authValidation, getLikes);
 
 export default likeRouter;
