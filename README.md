@@ -2,7 +2,7 @@
 
 Linkr is a social network for posting links and user interaction through likes, comments and shares.
 
-## Tecnologias
+## Technologies
 Some tools and frameworks were applied on this application (you can find the full list on the package.json file):<br>
 <p>
   <img style='margin: 5px;' src="https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E"/>
@@ -13,6 +13,7 @@ Some tools and frameworks were applied on this application (you can find the ful
   <img style='margin: 5px;' src="https://img.shields.io/badge/.ENV-ECD53F.svg?style=for-the-badge&logo=dotenv&logoColor=black"/>
   
 </p>
+
 ## How to run
 1. Clone this repository
 2. Install dependencies
