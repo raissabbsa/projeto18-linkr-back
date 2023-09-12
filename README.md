@@ -18,11 +18,10 @@ Some tools and frameworks were applied on this application (you can find the ful
 1. Clone this repository
 2. Install dependencies
 ```bash
-npm i
+      npm i
 ```
 3. Create a .env file in the project root according to the variables listed in the .env.example file present in the project
-```
-3. Run the code using
+4. Run the code using
 ```bash
-npm start
+      npm start
 ```
